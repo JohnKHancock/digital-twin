@@ -1,7 +1,25 @@
 import os
-import shutil
 import zipfile
 import subprocess
+
+APP_FILES = ["server.py", "lambda_handler.py", "context.py", "resources.py"]
+
+
+def build_docker_shell_command() -> str:
+    app_copy_steps = " && ".join(
+        f"( [ -f /var/task/{file} ] && cp /var/task/{file} /var/task/lambda-package/ ) || true"
+        for file in APP_FILES
+    )
+    return (
+        "rm -rf /tmp/lambda-package && "
+        "pip install --target /tmp/lambda-package -r /var/task/requirements.txt "
+        "--platform manylinux2014_x86_64 --only-binary=:all: && "
+        "rm -rf /var/task/lambda-package && "
+        "mkdir -p /var/task/lambda-package && "
+        "cp -a /tmp/lambda-package/. /var/task/lambda-package/ && "
+        f"{app_copy_steps} && "
+        "if [ -d /var/task/data ]; then cp -r /var/task/data /var/task/lambda-package/; fi"
+    )
 
 
 def main():
@@ -29,28 +47,10 @@ def main():
             "public.ecr.aws/lambda/python:3.13",
             "/bin/sh",
             "-c",
-            "rm -rf /tmp/lambda-package && "
-            "pip install --target /tmp/lambda-package -r /var/task/requirements.txt "
-            "--platform manylinux2014_x86_64 --only-binary=:all: && "
-            "rm -rf /var/task/lambda-package && "
-            "mkdir -p /var/task/lambda-package && "
-            "cp -a /tmp/lambda-package/. /var/task/lambda-package/",
+            build_docker_shell_command(),
         ],
         check=True,
     )
-
-    # Copy application files
-    print("Copying application files...")
-    for file in ["server.py", "lambda_handler.py", "context.py", "resources.py"]:
-        if os.path.exists(file):
-            shutil.copy2(file, "lambda-package/")
-    
-    # Copy data directory
-    if os.path.exists("data"):
-        dest = "lambda-package/data"
-        if os.path.exists(dest):
-            shutil.rmtree(dest, ignore_errors=True)
-        shutil.copytree("data", dest)
 
     # Create zip
     print("Creating zip file...")
