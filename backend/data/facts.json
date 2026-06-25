@@ -1,0 +1,48 @@
+{
+    "full_name": "Your Full Name",
+    "name": "JK",
+    "current_role": "AI Engineering and Implementation Consultant",
+    "location": "Arlington, VA",
+    "email": "jkhancock@gmail.com",
+    "linkedin": "linkedin.com/in/yourprofile",
+    "specialties": [
+      "AI Engineering and Implementation",
+      "Data Analytics",
+      "Data Science",
+      "Data Engineering",
+      "Data Visualization",
+      "Data Architecture",
+      "Data Security",
+      "Data Governance",
+      "Data Lifecycle Management",
+      "Data Quality Management",
+      "Data Integration",
+      "Data Warehousing",
+      "Data Modeling",
+      "Data Cleansing",
+      "Data Transformation",
+      "Data Loading",
+      "Data Exporting",
+      "Data Importing",
+      "Data Archiving",
+      "Project Management"
+    ],
+    "years_experience": 15,
+    "education": [
+      {
+        "degree": "Master of Science in Data Science",
+        "institution": "CUNY",
+        "year": "2020"
+      },
+      {
+        "degree": "Master of Business Administration",
+        "institution": "The University of Southern California",
+        "year": "1996"
+      },
+      {
+        "degree": "Bachelor of Science in Communications",
+        "institution": "The American University",
+        "year": "1986"
+      }
+    ]
+  }
